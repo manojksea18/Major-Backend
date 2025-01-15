@@ -121,6 +121,114 @@ const addAdmin = async( req, res) =>{
    .status(201)
    .json(new ApiResponse(200, createdAmin, "Admin registered successfully"));
    
+};
+
+
+const loginAdmin = async (req, res) => {
+    try{
+        //Log the request body for debugging
+        console.log("Login Request Body:", req.body);
+        const {email, contact, password} = req.body;
+
+
+        //Validate input
+        if (!password){
+            return res
+            .status(400)
+            .json(new ApiResponse(400, null, "Password is required"));
+
+        }
+
+        if(!(email || contact)){
+            return res
+            .status(400)
+            .json(new ApiResponse(400, null, "Email or contact is required"));
+
+        }
+
+        //sanitize and trim inputs
+
+        const sanitizedEmail = email?.trim();
+        const sanitizedContact = contact?.trim();
+
+
+        //Find the user in the database
+
+        const admin = await Admin.findOne({
+            $or : [{email: sanitizedEmail}, {contact:sanitizedContact}],
+        });
+
+
+        if(!Admin){
+            return res
+            .status(404)
+            .json(new ApiResponse(404, null, "Admin does not exist"));
+
+        }
+
+        //Validate password
+        const isPasswordValid = await admin.isPasswordCorrect(password);
+        if (!isPasswordValid){
+            return res
+            .status(401)
+            .json(new ApiResponse(401, null, "Invalid user credentails"));
+
+        }
+
+        // Generate tokens
+        const { accessToken, refreshToken} = await generateAccessAndRefreshTokens(
+            admin._id
+        );
+
+        // Exclude sensitive fields
+        const loggedInAdmin = await Admin.findById(admin._id).select(
+            "-password - refreshToken"
+        );
+
+        //set cookie options
+        const cookieOptions = {
+            httpOnly: true,
+            secure : process.env.NODE_ENV === "production", // secure only in production
+            sameSite: "Strict", // prevent CSRF
+
+        };
+
+        // Respond with tokens and user data 
+
+        return res
+        .status(200)
+        .cookie("accessToken", accessToken,cookieOptions)
+        .cookie("refreshToken", refreshToken, cookieOptions)
+        .json(
+            new ApiResponse(
+                200,
+                {
+                    admin :loggedInAdmin,
+                    accessToken,
+                    refreshToken,
+                },
+                "admin logged in successfully"
+            )
+        );
+
+    } catch(error){
+        console.error("Error in loginAdmin:", error.message);
+        return res
+        .status(500)
+        .json(
+            new ApiResponse(
+                500,
+                null,
+                "An error occured during login" + error.message
+            )
+        );
+    }
+}
+
+module.exports={
+    findById,
+    addAdmin,
+    loginAdmin,
 }
 
 

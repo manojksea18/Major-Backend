@@ -3,6 +3,7 @@ const User = require("../model/admin");
 const jwt = require("jsonwebtoken");
 const ApiError = require("../utils/ApiError");
 const Admin = require("../model/admin");
+const ApiResponse = require("../utils/ApiResponse");
 
 const generateAccessAndRefreshTokens  = async (userId)=>{
     try {
@@ -73,6 +74,53 @@ const addAdmin = async( req, res) =>{
 
    }=req.body;
 
+   if (
+    [
+        first_name ||
+        last_name ||
+        gender ||
+        date_of_birth ||
+        email ||
+        contact ||
+        password,
+    ] .some((field) => field?.trim() ==="")
+   ){
+    throw new ApiError(400, "All fields are required");
+   }
+
+   const existedAdmin = await Admin.findOne({
+    $or : [{contact}, {email}],
+   });
+
+   if (existedAdmin){
+    throw new ApiError(409, "User with email or phone already exists");
+
+   }
+
+   let profileImageLocalPath = req.file?.path;
+   console.log(profileImageLocalPath);
+
+   const user = await Admin.create({
+    email,
+    contact,
+    password,
+    first_name,
+    last_name,
+    gender,
+    date_of_birth,
+    picture:profileImageLocalPath,
+
+   });
+
+   const createdAmin = await Admin.findById(user._id);
+   if(!createdAmin){
+    throw new ApiError(500, "Something went wrong while registering the admin");
+
+   }
+   return res
+   .status(201)
+   .json(new ApiResponse(200, createdAmin, "Admin registered successfully"));
+   
 }
 
 

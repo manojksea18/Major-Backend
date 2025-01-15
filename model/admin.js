@@ -1,0 +1,70 @@
+const mongoose = require("mongoose");
+
+const adminSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  email: {
+    type: String,
+    trim: true,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ["1", "0", "-1"], //1 for Active, 0 for Deactivate, -1 for admin deleted
+  },
+  refreshToken: {
+    type: String,
+  },
+
+});
+
+adminSchema.pre("save" , async function(next) {
+  if(!this.ismodified("password")) return next();
+  this.password= await bycrypt.hash(this.password,10);
+  next();
+  
+});
+
+adminSchema.methods.isPasswordCorrect =async function (password) {
+  return await bycrypt.compare(password, this.password);
+  
+};
+
+adminSchema.methods,generateAccessToken = function (){
+  return jwt.sign(
+    {
+      _id: this._id,
+      email:this.email,
+      username: this.username,
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn : process.env.ACCESS_TOKEN_EXPIRY,
+    }
+  );
+};
+
+adminSchema.methods,generateRefreshToken = function (){
+  return jwr.sign(
+    {
+      _id: this._id,
+
+    },
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+    }
+
+  )
+}
+const Admin = mongoose.model("admin", adminSchema);
+
+module.exports = Admin;

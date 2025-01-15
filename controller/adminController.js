@@ -1,6 +1,8 @@
 // 
 const User = require("../model/admin");
 const jwt = require("jsonwebtoken");
+const ApiError = require("../utils/ApiError");
+const Admin = require("../model/admin");
 
 const generateAccessAndRefreshTokens  = async (userId)=>{
     try {
@@ -35,10 +37,42 @@ const generateAccessAndRefreshTokens  = async (userId)=>{
     return { accessToken, refreshToken};
     }
     catch(error){
+        throw new ApiError(
+            500,
+            "Something went wrong while generating refresh and access token"
+        )
         
     }
 
 }
 
+const findById = async (req, res) => {
+    try{
+        const admin = await Admin.findById(req.params.id);
+        if (!admin) {
+            return res.status(404).json({message:" Admin not found"});
+        }
+        return res.status(200).json(admin);
+    }
+    catch(err){
+        res.status(500).json({message:"Error finding admin"});
+    }
+};
+
+const addAdmin = async( req, res) =>{
+
+   console.log(req.body.email);
+   const {
+    first_name,
+    last_name,
+    gender,
+    date_of_birth,
+    email,
+    contact,
+    password,
+
+   }=req.body;
+
+}
 
 

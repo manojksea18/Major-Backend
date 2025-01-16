@@ -2,10 +2,10 @@ const express = require("express");
 
 const {
     // findById,
-    addAdmin,
+        addAdmin,
     // loginAdmin,
 
-}= require("../controller/admin1Controller");
+} = require("../controller/admin1Controller");
 const router = express.Router();
 
 
@@ -16,5 +16,8 @@ const router = express.Router();
 router.post("/", addAdmin);
 
 // router.post("/login", loginAdmin);
+
+const adminController = require("../controller/admin1Controller");
+console.log(adminController);
 
 module.exports = router;

@@ -6,7 +6,7 @@ const Admin = require("../model/admin");
 
 const addAdmin = async ( req, res)=> {
     try{
-        const admin = new Admin(...req.body);
+        const admin = new Admin({...req.body, admin_id:req.body.owner_id});
         await admin.save(); //insert into table
     res.status(201).send(admin);
   } catch (error) {
@@ -14,4 +14,4 @@ const addAdmin = async ( req, res)=> {
   }
 };
 
-module.exports= addAdmin;
+module.exports= {addAdmin}; // Export as part of an object

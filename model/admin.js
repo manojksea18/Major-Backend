@@ -53,7 +53,7 @@ adminSchema.methods,generateAccessToken = function (){
 };
 
 adminSchema.methods,generateRefreshToken = function (){
-  return jwr.sign(
+  return jwt.sign(
     {
       _id: this._id,
 

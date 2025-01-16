@@ -1,19 +1,20 @@
 const express = require("express");
-const router = express.Router();
 
 const {
-    findById,
+    // findById,
     addAdmin,
-    loginAdmin,
+    // loginAdmin,
 
-}= require("../controller/adminController");
+}= require("../controller/admin1Controller");
+const router = express.Router();
 
-router.get("/:id", findById);
+
+// router.get("/:id", findById);
 
 // router.post("/", upload.single("picture"), addAdmin);
 
 router.post("/", addAdmin);
 
-router.post("/login", loginAdmin);
+// router.post("/login", loginAdmin);
 
 module.exports = router;

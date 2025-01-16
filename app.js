@@ -9,7 +9,7 @@ const app = express();
 connectDB();
 
 app.use(express.json());
-app.use("/api/admin", adminRoutes);
+app.use("/api/admin/", adminRoutes);
 
 const port = 8080;
 app.listen(port, ()=>{

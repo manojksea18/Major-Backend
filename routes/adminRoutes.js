@@ -1,4 +1,4 @@
-const express = require("express");
+import { Router } from "express";
 
 const {
     // findById,
@@ -6,14 +6,15 @@ const {
     // loginAdmin,
 
 } = require("../controller/admin1Controller");
-const router = express.Router();
+const adminRoutes = Router()
 
+adminRoutes
+    .route("/",addAdmin)
 
 // router.get("/:id", findById);
 
 // router.post("/", upload.single("picture"), addAdmin);
 
-router.post("/", addAdmin);
 
 // router.post("/login", loginAdmin);
 

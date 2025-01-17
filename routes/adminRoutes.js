@@ -1,24 +1,17 @@
-import { Router } from "express";
+const express = require("express");
+const router = express.Router();
 
 const {
-    // findById,
-        addAdmin,
-    // loginAdmin,
+    addAdmin,
 
-} = require("../controller/admin1Controller");
-const adminRoutes = Router()
+} = require("../controller/adminController");
 
-adminRoutes
-    .route("/",addAdmin)
 
 // router.get("/:id", findById);
 
 // router.post("/", upload.single("picture"), addAdmin);
-
-
 // router.post("/login", loginAdmin);
 
-const adminController = require("../controller/admin1Controller");
-console.log(adminController);
+router.post("/add", addAdmin);
 
 module.exports = router;

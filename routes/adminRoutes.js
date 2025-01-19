@@ -3,6 +3,8 @@ const router = express.Router();
 
 const {
     addAdmin,
+    getAll,
+    getById,
 
 } = require("../controller/adminController");
 
@@ -13,5 +15,9 @@ const {
 // router.post("/login", loginAdmin);
 
 router.post("/add", addAdmin);
+router.get("/", getAll);
+router.get("/:id", getById);
+
+
 
 module.exports = router;

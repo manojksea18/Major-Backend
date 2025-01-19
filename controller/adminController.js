@@ -30,14 +30,15 @@ const addAdmin = async (req, res) => {
 
 const getAll= async(req, res) => {
     try{
-        const admins = await Admin.get();
-        if(!admins){
+        const admins = await Admin.find({});
+        if(!admins.length){
             return res.status(400).json({message: "Admin not found"});
             }
-            return res.status(200).json(admin);
+            return res.status(200).json(admins);
 
-    }catch(err){
-        res.status(500).json({message: "Error finding customer"});
+    }catch(error){
+        console.error("Error getting all admins:", error);
+        res.status(500).json({message: "Error finding admin"});
     }
 };
 
@@ -47,9 +48,9 @@ const getById = async (req, res) => {
     if (!adminn){
         return res.status(400).json({message: "Admin not found"});
     } 
-    return res.status(200).json(admin); 
+    return res.status(200).json(adminn); 
  }
- catch(err){
+ catch(error){
     res.status(500).json({message: "Error finding Admin"});
  }
 }

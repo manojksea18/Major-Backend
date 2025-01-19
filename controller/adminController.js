@@ -44,7 +44,7 @@ const getAll= async(req, res) => {
 
 const getById = async (req, res) => {
     try{
-        const adminn = Admin.getById(req.params.id);
+        const adminn = await Admin.findById(req.params.id);
     if (!adminn){
         return res.status(400).json({message: "Admin not found"});
     } 

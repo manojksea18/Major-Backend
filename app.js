@@ -1,10 +1,15 @@
 require("dotenv").config(); //Load environment variables from the .env file
 
 const express = require("express");
+const cors = require("cors"); // Import the CORS package
 const connectDB = require("./config/db"); //Database connection module
 const adminRoutes = require("./routes/adminRoutes"); //Admin routes
 
 const app = express();
+
+// Use CORS middleware to allow cross-origin requests
+app.use(cors()); // This will allow all origins by default
+
 
 //connect to the database
 connectDB();

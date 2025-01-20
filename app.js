@@ -8,7 +8,9 @@ const adminRoutes = require("./routes/adminRoutes"); //Admin routes
 const app = express();
 
 // Use CORS middleware to allow cross-origin requests
-app.use(cors()); // This will allow all origins by default
+app.use(cors(
+    {origin: "http://localhost:3000"}
+)); // This will allow all origins by default
 
 
 //connect to the database

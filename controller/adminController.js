@@ -54,6 +54,25 @@ const getById = async (req, res) => {
     res.status(500).json({message: "Error finding Admin"});
  }
 }
+const login = async(req,res)=>{
+    const{username, password} =req.body;
+    const log = await Admin.findOne({username});
+    if(!log || !(await bcrypt.compare(password, log.password))){
+        return res.status(403).send("Invalid username or password");
+    }
+
+      // Generate JWT Token // SECRET_KEY is in auth.js
+const token = jwt.sign(
+{username:log.username},
+"12345",
+{
+    expires: "1h",
+}
+
+);
+res.json({token});
+}
+
 
 // const loginCustomer = async (req, res) => {
 //     try {
@@ -149,4 +168,5 @@ module.exports= {
     addAdmin,
     getAll,
     getById,
+    login,
 }; // Export as part of an object

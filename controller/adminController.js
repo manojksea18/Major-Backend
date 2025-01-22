@@ -1,6 +1,10 @@
 const Admin = require("../model/admin");
 // const ApiError = require("../utils/ApiError");
 // const ApiResponse = require("../utils/ApiResponse");
+const bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
+
+
 
 
 
@@ -66,7 +70,7 @@ const token = jwt.sign(
 {username:log.username},
 "12345",
 {
-    expires: "1h",
+    expiresIn: "1h",
 }
 
 );

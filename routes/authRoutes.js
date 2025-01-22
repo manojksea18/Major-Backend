@@ -1,8 +1,10 @@
+
 const express = require("express");
+const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
-const Admin = require("../model/admin");
+const adminn = require("../model/admin");
 
 const app =express();
 const PORT = process.env.PORT || 8080;
@@ -13,7 +15,7 @@ app.post( "/login",async(req,res)=>{
 
     try{
          // Find the user by username (ensure the User model is correctly set up)
-    const user = await Admin.findOne({ username });
+    const user = await adminn.findOne({ username });
     if (!user) {
       return res.status(400).json({ message: "Invalid username or password" });
     }
@@ -37,3 +39,4 @@ app.post( "/login",async(req,res)=>{
       res.status(500).json({ message: "Server error" });
     }
 });
+module.exports = router;

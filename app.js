@@ -5,6 +5,7 @@ const cors = require("cors"); // Import the CORS package
 const allowedOrigins = ['http://localhost:5173', 'http://localhost:3000']; // Add your frontend URL here
 const connectDB = require("./config/db"); //Database connection module
 const adminRoutes = require("./routes/adminRoutes"); //Admin routes
+const authRoutes = require("./routes/authRoutes")
 
 const app = express();
 
@@ -35,6 +36,8 @@ app.use(express.json());
 
 //Admin routes
 app.use("/admin", adminRoutes);
+app.use("/admin/api", authRoutes);
+
 
 
 const port = 8080;

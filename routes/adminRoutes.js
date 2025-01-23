@@ -7,6 +7,7 @@ const {
     getAll,
     getById,
     login,
+    updateAdmin,
 
 
 } = require("../controller/adminController");
@@ -20,6 +21,7 @@ const authenticateToken = require("../middlewares/auth_middlware");
 
 router.post("/add", addAdmin);
 router.post("/login", login, authenticateToken);
+router.put("/update", updateAdmin);
 router.get("/", getAll);
 router.get("/:id", getById);
 

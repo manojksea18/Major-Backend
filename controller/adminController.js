@@ -34,7 +34,7 @@ const addAdmin = async (req, res) => {
 
 const getAll= async(req, res) => {
     try{
-        const admin = await Admin.find({});
+        const admins = await Admin.find({});
         if(!admins.length){
             return res.status(400).json({message: "Admin not found"});
             }
@@ -85,8 +85,65 @@ res.status(200).json({ token, message: "Login successful" });
 } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "An error occurred during login" });
-}
 };
+};
+
+const updateAdmin = async (req,res) =>{
+    try{
+        const{adminId} = req.params;
+        const{ username, email, currentPassword , newPassword} = req.body;
+
+
+        //validate input        
+        if(!username || !adminId || !email){
+            return res.status(400).json({success:false, message: "Misssing required fields."});
+        }
+
+        // find the admin by ID
+        const admin = await Admin.findById(adminId);
+        if(!admin){
+            return res.status(404).json({success: false, message: "Admin not found." });
+        }
+
+
+        //if a password change is requested , verify the current password
+        if (currentPassword && newPassword){
+            const isMatch = await bcrypt.compare(currentPassword, admin.password);
+            if(!isMatch){
+                return res.status(400).json({success: false, message:"Current password is incorrect."});
+
+            }
+            if (newPassword.length<6){
+                return res.status(400).json({succcess: false , message :"New password must be at least 6 characters long."});
+
+            }
+            // Hash the new password
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+            admin.password = hashedPassword;
+        }
+
+         // Update other fields
+            admin.username = username;
+            admin.email = email;
+
+            // save the updated admin data
+            await admin.save();
+
+            res.status(200).json({
+                success:true,
+                message:"Admin updated successfully.",
+                data:{
+                    username:admin.username,
+                    email:admin.email,
+                },
+            });
+    }       catch(err){
+            console.error("Error in updateAmin:", err);
+            res.status(500).json({ success: false, message:"Internal server error."})
+
+    }
+
+}
 
 
 
@@ -96,4 +153,5 @@ module.exports= {
     getAll,
     getById,
     login,
+    updateAdmin,
 }; // Export as part of an object

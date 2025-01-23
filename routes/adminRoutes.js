@@ -21,7 +21,7 @@ const authenticateToken = require("../middlewares/auth_middlware");
 
 router.post("/add", addAdmin);
 router.post("/login", login, authenticateToken);
-router.put("/update", updateAdmin);
+router.put("/update/:adminId", updateAdmin);
 router.get("/", getAll);
 router.get("/:id", getById);
 

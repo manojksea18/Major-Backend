@@ -95,10 +95,10 @@ const updateAdmin = async (req,res) =>{
 
 
         //validate input        
-        if(!username || !adminId || !email){
+        if(!username ||  !email){
             return res.status(400).json({success:false, message: "Misssing required fields."});
         }
-
+        console.log("adminId being used:", adminId); 
         // find the admin by ID
         const admin = await Admin.findById(adminId);
         if(!admin){

@@ -12,6 +12,7 @@ const {
 
 } = require("../controller/adminController");
 const authenticateToken = require("../middlewares/auth_middlware");
+const getIdFromToken = require("../utils/getIdFromToken");
 
 
 // router.get("/:id", findById);
@@ -24,6 +25,7 @@ router.post("/login", login, authenticateToken);
 router.get("/", getAll);
 router.get("/:id", getById);
 router.put("/update/:adminId", updateAdmin);
+router.get("/getIdFromToken",getIdFromToken)
 
 
 

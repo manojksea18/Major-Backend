@@ -73,12 +73,13 @@ const login = async(req,res)=>{
     if (!isMatch) {
         return res.status(403).json({ message: "Invalid username or password" });
     }
-
+console.log(log)
       // Generate JWT Token // SECRET_KEY is in auth.js
       const token = jwt.sign(
-        { username: log.username },
-        "12345", // Make sure to use a secure key in production
-        { expiresIn: "1h" }
+        { username: log.username,
+            userId:log._id
+         },
+        "12345"
     );
 
 res.status(200).json({ token, message: "Login successful" });
@@ -90,12 +91,13 @@ res.status(200).json({ token, message: "Login successful" });
 
 const updateAdmin = async (req,res) =>{
     try{
+
         const{adminId} = req.params;
         const{ username, email, currentPassword , newPassword} = req.body;
 
 
         //validate input        
-        if(!username ||  !email){
+        if(!username ||!adminId||  !email){
             return res.status(400).json({success:false, message: "Misssing required fields."});
         }
         console.log("adminId being used:", adminId); 

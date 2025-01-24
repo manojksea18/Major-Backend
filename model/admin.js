@@ -46,7 +46,7 @@ adminSchema.methods,generateAccessToken = function (){
       email:this.email,
       username: this.username,
     },
-    process.env.ACCESS_TOKEN_SECRET,
+    "12345",
     {
       expiresIn : process.env.ACCESS_TOKEN_EXPIRY,
     }

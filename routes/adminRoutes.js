@@ -21,7 +21,7 @@ const getIdFromToken = require("../utils/getIdFromToken");
 // router.post("/login", loginAdmin);
 
 router.post("/add", addAdmin);
-router.post("/login", login, authenticateToken);
+router.post("/login", login);
 router.get("/", getAll);
 router.get("/:id", getById);
 router.put("/update/:adminId", updateAdmin);

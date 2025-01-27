@@ -79,7 +79,17 @@ console.log(log)
         { username: log.username,
             userId:log._id
          },
-        "12345"
+         '12345',
+         {
+            expiresIn: "1h", // Access token expires in 1 hour
+        }
+    );
+    const refreshToken = jwt.sign(
+        { userId: log._id },
+        '12345',//arate secret for refresh token
+        {
+            expiresIn: "7d", // Refresh token expires in 7 days
+        }
     );
 
 res.status(200).json({ token, message: "Login successful" });

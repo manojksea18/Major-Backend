@@ -99,6 +99,20 @@ res.status(200).json({ token, message: "Login successful" });
 };
 };
 
+const logout = (req, res) => {
+    const { refreshToken } = req.body;
+    if (!refreshToken) return res.status(400).json({ message: "Refresh token required" });
+
+    const index = refreshTokens.indexOf(refreshToken);
+    if (index !== -1) {
+        refreshTokens.splice(index, 1); // Remove the token
+        return res.status(200).json({ message: "Logged out successfully" });
+    }
+    
+    res.status(400).json({ message: "Invalid refresh token" });
+};
+
+
 const updateAdmin = async (req,res) =>{
     try{
 
@@ -162,5 +176,6 @@ module.exports= {
     getAll,
     getById,
     login,
+    logout,
     updateAdmin,
 }; // Export as part of an object
